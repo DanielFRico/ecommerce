@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'home.dart';
+import '../../../home/presentation/home_page.dart';
 
-class AuthGate extends StatelessWidget {
-  const AuthGate({super.key});
+class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +35,16 @@ class AuthGate extends StatelessWidget {
               );
             },
             footerBuilder: (context, action) {
-              return const Padding(
+              return Padding(
                 padding: EdgeInsets.only(top: 16),
-                child: Text(
-                  'By signing in, you agree to our terms and conditions.',
-                  style: TextStyle(color: Colors.grey),
-                ),
+                child: action == AuthAction.signIn
+                    ? const Text(
+                        'By signing in, you agree to our terms and conditions.',
+                        style: TextStyle(color: Colors.grey),
+                      )
+                    : const Text(
+                        'By signing up, you agree to our terms and conditions.',
+                        style: TextStyle(color: Colors.grey)),
               );
             },
             sideBuilder: (context, shrinkOffset) {
