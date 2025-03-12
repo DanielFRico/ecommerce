@@ -85,7 +85,7 @@ class _BodyLoginWidgetState extends State<BodyLoginWidget> with LoginMixin {
       listener: (BuildContext context, LoginState state) {
         if (state is LoginSuccessState) {
           GoRouter.of(context).pushReplacementNamed("home");
-        } else if (state is LoginErrorState) {
+        } else if (state is LoginErrorState && state.displayLoginError) {
           showDialog(
             context: context,
             builder: (BuildContext context) => AlertDialog(

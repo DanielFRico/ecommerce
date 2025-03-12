@@ -9,25 +9,33 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   LoginBloc(this._firebaseAuth) : super(InitialState()) {
     on<EmailChangedEvent>((event, emit) {
-      emit(state.copyWith(email: event.email));
+      emit(state.copyWith(email: event.email, displayLoginError: false));
     });
 
     on<PasswordChangedEvent>((event, emit) {
-      emit(state.copyWith(password: event.password));
+      emit(state.copyWith(password: event.password, displayLoginError: false));
     });
 
     on<SubmittedEvent>((event, emit) async {
-      emit(LoadingState());
+      emit(LoadingState(email: state.email, password: state.password));
       try {
         UserCredential userCredential =
             await _firebaseAuth.signInWithEmailAndPassword(
-                email: 'danielrico953@gmail.com', password: '123456');
+          email: state.email,
+          password: state.password,
+        );
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool("login", true);
-        emit(LoginSuccessState(user: userCredential.user));
+        emit(LoginSuccessState(
+            user: userCredential.user,
+            email: state.email,
+            password: state.password));
       } catch (e) {
-        print(e.toString());
-        emit(LoginErrorState(error: e.toString()));
+        emit(LoginErrorState(
+            error: e.toString(),
+            email: state.email,
+            password: state.password,
+            displayLoginError: true));
       }
     });
   }
