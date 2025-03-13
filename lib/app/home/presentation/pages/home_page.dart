@@ -20,6 +20,11 @@ class HomePage extends StatelessWidget {
               preferredSize: Size.fromHeight(60), child: AppBarWidget()),
           body: const ProductsListWidget(),
           floatingActionButton: FloatingActionButton(
+              backgroundColor: Colors.brown,
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
               onPressed: () => GoRouter.of(context).pushNamed("form-product")),
         ),
       ),
@@ -36,12 +41,28 @@ class AppBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final bloc = context.read<HomeBloc>();
     return AppBar(
-      backgroundColor: Colors.purple,
+      backgroundColor: Colors.brown,
       title: const Text(
         "Listado de productos",
         style: TextStyle(color: Colors.white),
       ),
       actions: [
+        InkWell(
+          onTap: () => GoRouter.of(context).pushNamed("users"),
+          child: Row(
+            children: [
+              Text(
+                "Usuarios",
+                style: TextStyle(fontSize: 12, color: Colors.white),
+              ),
+              Icon(
+                Icons.person,
+                color: Colors.white,
+              )
+            ],
+          ),
+        ),
+        SizedBox(width: 12),
         InkWell(
           onTap: () => bloc.add(LogoutEvent()),
           child: Icon(
@@ -69,16 +90,22 @@ class _ProductListWidgetState extends State<ProductsListWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     final bloc = context.read<HomeBloc>();
     bloc.add(GetProductsEvent());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bloc = context.read<HomeBloc>();
     return BlocConsumer<HomeBloc, HomeState>(
       listener: (context, state) {
         switch (state) {
           case HomeErrorState():
             AlertDialog(
               title: const Text("Error"),
-              content: const Text("Hubo un eeror trayendo los productos"),
+              content: const Text("Hubo un error trayendo los productos"),
               actions: [
                 TextButton(
                     onPressed: () {
@@ -99,9 +126,9 @@ class _ProductListWidgetState extends State<ProductsListWidget> {
       builder: (context, state) {
         switch (state) {
           case LoadingState():
-            return Text(state.message);
+            return const Center(child: CircularProgressIndicator());
           case EmptyState():
-            return const Center(child: Text("nooooo se encontraron productos"));
+            return const Center(child: Text("No se encontraron productos"));
           case LoadDataState():
             return ListView.builder(
                 itemCount: state.model.products.length,
@@ -130,7 +157,7 @@ class ProductItemWidget extends StatelessWidget {
           context: context,
           builder: ((context) => AlertDialog(
                 title: const Text("Eliminación de producto:"),
-                content: const Text("Estas seguro de eliminar este producto?"),
+                content: const Text("¿Estás seguro de eliminar este producto?"),
                 actions: [
                   TextButton(
                       onPressed: () => {

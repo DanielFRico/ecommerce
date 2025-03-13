@@ -93,6 +93,7 @@ class _BodyLoginWidgetState extends State<BodyLoginWidget> {
                     ),
                     SizedBox(height: 32.0),
                     TextFormField(
+                      initialValue: state.model.urlImage,
                       onChanged: (value) =>
                           bloc.add(UrlImageChangedEvent(urlImage: value)),
                       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -104,6 +105,7 @@ class _BodyLoginWidgetState extends State<BodyLoginWidget> {
                     ),
                     SizedBox(height: 32.0),
                     TextFormField(
+                      keyboardType: TextInputType.number,
                       onChanged: (value) =>
                           bloc.add(PriceChangedEvent(price: value)),
                       autovalidateMode: AutovalidateMode.onUserInteraction,

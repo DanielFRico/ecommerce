@@ -1,5 +1,6 @@
 import 'package:ecommerce/app/home/presentation/pages/home_page.dart';
 import 'package:ecommerce/app/login/presentation/pages/login_page.dart';
+import 'package:ecommerce/app/users/prensentation/pages/users_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -41,6 +42,7 @@ class MainApp extends StatelessWidget {
           path: "/form-product",
           builder: (_, __) => FormProductPage(),
           name: "form-product"),
+      GoRoute(path: "/users", builder: (_, __) => UsersPage(), name: "users"),
     ]);
     return MaterialApp.router(
       routerConfig: router,

@@ -9,7 +9,12 @@ sealed class FormProductState {
 final class InitialState extends FormProductState {
   InitialState()
       : super(
-            model: ProductFormModel(id: "", name: "", price: "", urlImage: ""));
+            model: ProductFormModel(
+                id: "",
+                name: "",
+                price: "",
+                urlImage:
+                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQu2Mk8RvjN5Fj5kLR9sZ8kjDFNtW8xaTm27rds1KnWjqyXt_UG2styAxBH_2oUU45Ev5I&usqp=CAU"));
 }
 
 final class DataUpdateState extends FormProductState {

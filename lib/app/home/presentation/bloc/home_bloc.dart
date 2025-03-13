@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ecommerce/app/core/domain/use_case/logout_use_case.dart';
 import 'package:ecommerce/app/home/domain/use_case/delete_product_use_case.dart';
@@ -12,11 +11,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final GetProductsUseCase getProductsUseCase;
   final DeleteProductsUseCase deleteProductsUseCase;
   final LogoutUseCase logoutUseCase;
-  HomeBloc(
-      {required this.getProductsUseCase,
-      required this.deleteProductsUseCase,
-      required this.logoutUseCase})
-      : super(EmptyState()) {
+
+  HomeBloc({
+    required this.getProductsUseCase,
+    required this.deleteProductsUseCase,
+    required this.logoutUseCase,
+  }) : super(LoadingState()) {
     on<GetProductsEvent>(_getProductsEvent);
 
     on<DeleteProductEvent>((deleteProductEvent, emit) async {
@@ -27,29 +27,32 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         final bool result =
             await deleteProductsUseCase.invoke(deleteProductEvent.id);
         if (result) {
-          _getProductsEvent(GetProductsEvent(), emit);
+          await _getProductsEvent(GetProductsEvent(), emit);
         } else {
-          throw (Exception());
+          throw Exception();
         }
       } catch (e) {
         newState = HomeErrorState(
-            model: state.model, message: "Error deleting product");
-        emit(newState);
+          model: state.model,
+          message: "Error deleting product",
+        );
+        if (!emit.isDone) emit(newState);
       }
     });
+
     on<LogoutEvent>((LogoutEvent event, emit) async {
-      logoutUseCase.invoke();
-      emit(LogoutState());
+      await logoutUseCase.invoke();
+      if (!emit.isDone) emit(LogoutState());
     });
   }
 
-  void _getProductsEvent(getProductsEvent, emit) async {
+  Future<void> _getProductsEvent(
+      GetProductsEvent event, Emitter<HomeState> emit) async {
     late HomeState newState;
     try {
       newState = LoadingState();
       emit(newState);
       final List<ProductModel> result = await getProductsUseCase.invoke();
-      debugPrint("danieleee: $result");
       if (result.isEmpty) {
         newState = EmptyState();
       } else {
@@ -57,8 +60,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
     } catch (e) {
       newState = HomeErrorState(
-          model: state.model, message: "Oops! Something wrong hapend");
+        model: state.model,
+        message: "Oops! Something wrong happened",
+      );
     }
-    emit(newState);
+    if (!emit.isDone) emit(newState);
   }
 }
