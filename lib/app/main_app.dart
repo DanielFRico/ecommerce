@@ -1,6 +1,7 @@
 import 'package:ecommerce/app/home/presentation/pages/home_page.dart';
 import 'package:ecommerce/app/login/presentation/pages/login_page.dart';
-import 'package:ecommerce/app/users/prensentation/pages/users_page.dart';
+import 'package:ecommerce/app/signup/presentacion/signup_page.dart';
+import 'package:ecommerce/app/users/presentation/pages/users_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,6 +27,11 @@ class MainApp extends StatelessWidget {
             }
             return null;
           }),
+      GoRoute(
+        path: "/signup",
+        builder: (_, __) => SignUpPage(),
+        name: "sign-up",
+      ),
       GoRoute(
           path: "/",
           builder: (_, __) => HomePage(),

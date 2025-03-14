@@ -42,18 +42,18 @@ class FooterLoginWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Aún no tiene cuenta?"),
+            const Text("Aún no tiene cuenta?"),
             const SizedBox(
-              width: 32.0,
+              width: 8.0,
             ),
             GestureDetector(
               onTap: () => GoRouter.of(context).pushNamed("sign-up"),
               child: const Text(
                 "Registrate acá",
                 style: TextStyle(
-                    color: Colors.purple,
+                    color: Colors.orange,
                     decoration: TextDecoration.underline,
-                    decorationColor: Colors.purple),
+                    decorationColor: Colors.orange),
               ),
             )
           ],
@@ -106,22 +106,26 @@ class _BodyLoginWidgetState extends State<BodyLoginWidget> with LoginMixin {
           final bool isValidForm = validateEmail(state.email) == null &&
               validatePassword(state.password) == null;
           return Container(
-            margin: const EdgeInsets.only(right: 32.0, left: 32.0, top: 80.0),
+            margin:
+                const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
             child: Form(
               key: keyForm,
               child: Column(
                 children: [
-                  Text("Email: ${state.email} y password: ${state.password}"),
+                  const SizedBox(height: 16.0),
                   TextFormField(
                     initialValue: state.email,
                     onChanged: (value) =>
                         bloc.add(EmailChangedEvent(email: value)),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: validateEmail,
-                    decoration: const InputDecoration(
-                      labelText: "Email:",
-                      prefixIcon: Icon(Icons.person),
+                    decoration: InputDecoration(
+                      labelText: "Email",
+                      prefixIcon: const Icon(Icons.person),
                       hintText: "Escriba tu email",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                     ),
                     keyboardType: TextInputType.emailAddress,
                   ),
@@ -134,9 +138,12 @@ class _BodyLoginWidgetState extends State<BodyLoginWidget> with LoginMixin {
                     validator: validatePassword,
                     obscureText: !showPassword,
                     decoration: InputDecoration(
-                      labelText: "Password:",
+                      labelText: "Password",
                       prefixIcon: const Icon(Icons.lock),
                       hintText: "Escriba tu Password",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                       suffixIcon: InkWell(
                         onTap: () {
                           autoShowTime?.cancel();
@@ -161,14 +168,22 @@ class _BodyLoginWidgetState extends State<BodyLoginWidget> with LoginMixin {
                     ),
                   ),
                   const SizedBox(height: 40.0),
-                  FilledButton(
+                  ElevatedButton(
                     onPressed:
                         isValidForm ? () => bloc.add(SubmittedEvent()) : null,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      backgroundColor: Colors.orange,
+                    ),
                     child: const SizedBox(
                       width: double.infinity,
                       child: Text(
                         "Iniciar sesión",
                         textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
@@ -195,13 +210,13 @@ class HeaderLoginWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.network(
+            "https://s3.amazonaws.com/cdn.hotglue.xyz/images/logos/firebase-auth.png",
             width: double.infinity,
             height: 100.0,
-            fit: BoxFit.fitWidth,
-            "https://cdn11.bigcommerce.com/s-x49po/images/stencil/800w/products/89261/250190/legacy_products%2FART_3319_71084__04721.1722626542.jpg?c=2",
+            fit: BoxFit.contain,
           ),
           Container(
-            color: Colors.blue,
+            padding: const EdgeInsets.all(8.0),
             child: const Text(
               "Inicio de Sesión",
               style: TextStyle(fontSize: 24.0),
